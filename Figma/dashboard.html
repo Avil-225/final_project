@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Magang Mahasiswa D3 TI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            background: #000000;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            padding: 0;
+            border-right: 2px solid #444;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+            overflow-y: auto;
+        }
+
+        .user-profile {
+            padding: 1.5rem;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .user-name {
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .nav-menu {
+            padding: 0;
+            list-style: none;
+        }
+
+        .nav-item {
+            border-top: 2px solid #444;
+            border-left: 2px solid #444;
+            border-bottom: 2px solid #444;
+        }
+
+        .nav-item:first-child {
+            border-top: 2px solid #444;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.2rem 1.5rem;
+            color: #ff8c42;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            font-weight: 500;
+            border: none;
+            background: transparent;
+        }
+
+        .nav-link:hover {
+            background: #1a1a1a;
+            color: #ff8c42;
+        }
+
+        .nav-link.active {
+            background: #ff8c42;
+            color: #000000;
+            font-weight: 600;
+        }
+
+        .nav-link i {
+            font-size: 1.1rem;
+            width: 20px;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            background: #000;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .header {
+            background: #000;
+            color: #ff8c42;
+            padding: 1rem 2rem 2rem 2rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border-top: 2px solid #444;
+            border-right: 2px solid #444;
+            border-bottom: 2px solid #444;
+            position: relative;
+        }
+
+        .breadcrumb-section {
+            background: #e9ecef;
+            padding: 0.75rem 2rem;
+            border: 2px solid #444;
+            width: 92%;
+            position: relative;
+            margin: -20px auto 0 auto;
+            z-index: 20;
+        }
+
+        .breadcrumb-text {
+            color: #ff8c42;
+            font-size: 0.95rem;
+            margin: 0;
+            text-align: left;
+        }
+
+        .content-area {
+            padding: 2rem;
+            background: #000;
+            min-height: calc(100vh - 200px);
+            position: relative;
+        }
+
+        .hero-banner {
+            background: linear-gradient(45deg, #ff8c42 0%, #ff6b1a 50%, transparent 50%), 
+                        linear-gradient(45deg, transparent 40%, rgba(59, 130, 246, 0.6) 50%, rgba(37, 99, 235, 0.7) 100%),
+                        url('pictures/amikom\ belakang.webp') right/cover;
+            height: 320px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 3rem;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 0.5rem;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: white;
+            font-weight: 500;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .cards-wrapper {
+            position: relative;
+            margin-top: 2rem;
+        }
+
+        .orange-bottom-bg {
+            position: fixed;
+            bottom: 0;
+            left: 280px;
+            right: 0;
+            height: 150px;
+            background: #b8732e;
+            z-index: 1;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            position: relative;
+            z-index: 2;
+            padding: 0 2rem;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: #fff3e6;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon i {
+            font-size: 1.5rem;
+            color: #ff8c42;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .card-description {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.4;
+            margin-bottom: 1rem;
+        }
+
+        .card-link {
+            color: #ff8c42;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .card-link:hover {
+            color: #e6792a;
+            text-decoration: none;
+        }
+
+        .card-link i {
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .orange-bottom-bg {
+                left: 0;
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="user-profile">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="user-name">Avillian Aufa</div>
+        </div>
+        
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#" class="nav-link active">
+                    <i class="fas fa-chart-line"></i>
+                    Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-check-circle"></i>
+                    Approval Magang
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-user-graduate"></i>
+                    Bimbingan
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-file-alt"></i>
+                    Laporan Magang
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-star"></i>
+                    Penilaian Magang
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-certificate"></i>
+                    Cetak Sertifikasi
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-users"></i>
+                    View Data Prodi
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            Magang Mahasiswa D3 TI
+        </div>
+        
+        <div class="breadcrumb-section">
+            <p class="breadcrumb-text">Approval Magang</p>
+        </div>
+        
+        <div class="content-area">
+            <div class="hero-banner">
+                <h1 class="hero-title">Find Your Future Today!</h1>
+                <p class="hero-subtitle">Holds The World</p>
+            </div>
+            
+            <div class="orange-bottom-bg"></div>
+            
+            <div class="cards-wrapper">
+                <div class="cards-container">
+                    <div class="info-card">
+                        <div class="card-icon">
+                            <i class="fas fa-laptop"></i>
+                        </div>
+                        <h3 class="card-title">Daftar Kuliah di AMIKOM Bisa dari Mana Saja</h3>
+                        <p class="card-description">Banyak pilihan beasiswa sampai dengan kuliah gratis 100%.</p>
+                        <a href="#" class="card-link">
+                            Info Beasiswa <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="card-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <h3 class="card-title">Kuliah di AMIKOM Tidak Mahal</h3>
+                        <p class="card-description">Cek biaya perkuliahan disini</p>
+                        <a href="#" class="card-link">
+                            Info Biaya Kuliah <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="card-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3 class="card-title">Sudah Siap Daftar Kuliah di AMIKOM?</h3>
+                        <p class="card-description">Klik tombol di bawah ini untuk melakukan pendaftaran online</p>
+                        <a href="#" class="card-link">
+                            Info PMB AMIKOM <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.style.transform = sidebar.style.transform === 'translateX(0%)' ? 'translateX(-100%)' : 'translateX(0%)';
+        }
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

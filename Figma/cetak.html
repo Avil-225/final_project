@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cetak Sertifikat - Magang Mahasiswa D3 TI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            background: #000000;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            padding: 0;
+            border-right: 2px solid #444;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+            overflow-y: auto;
+        }
+
+        .user-profile {
+            padding: 1.5rem;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .user-name {
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .nav-menu {
+            padding: 0;
+            list-style: none;
+        }
+
+        .nav-item {
+            border-top: 2px solid #444;
+            border-left: 2px solid #444;
+            border-bottom: 2px solid #444;
+        }
+
+        .nav-item:first-child {
+            border-top: 2px solid #444;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.2rem 1.5rem;
+            color: #ff8c42;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            font-weight: 500;
+            border: none;
+            background: transparent;
+        }
+
+        .nav-link:hover {
+            background: #1a1a1a;
+            color: #ff8c42;
+        }
+
+        .nav-link.active {
+            background: #ff8c42;
+            color: #000000;
+            font-weight: 600;
+        }
+
+        .nav-link i {
+            font-size: 1.1rem;
+            width: 20px;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            background: #000;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .header {
+            background: #000;
+            color: #ff8c42;
+            padding: 1rem 2rem 2rem 2rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border-top: 2px solid #444;
+            border-right: 2px solid #444;
+            border-bottom: 2px solid #444;
+            position: relative;
+        }
+
+        .breadcrumb-section {
+            background: #e9ecef;
+            padding: 0.75rem 2rem;
+            border: 2px solid #444;
+            width: 92%;
+            position: relative;
+            margin: -20px auto 0 auto;
+            z-index: 20;
+        }
+
+        .breadcrumb-text {
+            color: #ff8c42;
+            font-size: 0.95rem;
+            margin: 0;
+            text-align: left;
+        }
+
+        .content-area {
+            padding: 2rem;
+            background: #000;
+            min-height: calc(100vh - 200px);
+            position: relative;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding-top: 2rem;
+            padding-left: 3rem;
+        }
+
+        .download-container {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem 2.5rem;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            min-width: 400px;
+            max-width: 500px;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .download-icon {
+            width: 80px;
+            height: 80px;
+            background: #e3f2fd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .download-icon i {
+            font-size: 2.5rem;
+            color: #2196f3;
+        }
+
+        .download-btn {
+            background: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 200px;
+        }
+
+        .download-btn:hover {
+            background: #1976d2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .content-area {
+                padding: 2rem 1rem;
+            }
+            
+            .download-container {
+                min-width: 280px;
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="user-profile">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="user-name">Avillian Aufa</div>
+        </div>
+        
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-chart-line"></i>
+                    Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-check-circle"></i>
+                    Approval Magang
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-user-graduate"></i>
+                    Bimbingan
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-file-alt"></i>
+                    Laporan Magang
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-star"></i>
+                    Penilaian Magang
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link active">
+                    <i class="fas fa-certificate"></i>
+                    Cetak Sertifikat
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-users"></i>
+                    View Data Prodi
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            Magang Mahasiswa D3 TI
+        </div>
+        
+        <div class="breadcrumb-section">
+            <p class="breadcrumb-text">Cetak Sertifikasi</p>
+        </div>
+        
+        <div class="content-area">
+            <div class="download-container">
+                <div class="download-icon">
+                    <i class="fas fa-download"></i>
+                </div>
+                
+                <button class="download-btn" onclick="handleDownload()">
+                    Download Here
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.style.transform = sidebar.style.transform === 'translateX(0%)' ? 'translateX(-100%)' : 'translateX(-100%)';
+        }
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                
+                this.classList.add('active');
+            });
+        });
+
+        function handleDownload() {
+            alert('Mengunduh sertifikat magang...');
+        }
+    </script>
+</body>
+</html>

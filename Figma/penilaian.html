@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penilaian Magang - Magang Mahasiswa D3 TI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            background: #000000;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            padding: 0;
+            border-right: 2px solid #444;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+            overflow-y: auto;
+        }
+
+        .user-profile {
+            padding: 1.5rem;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .user-name {
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .nav-menu {
+            padding: 0;
+            list-style: none;
+        }
+
+        .nav-item {
+            border-top: 2px solid #444;
+            border-left: 2px solid #444;
+            border-bottom: 2px solid #444;
+        }
+
+        .nav-item:first-child {
+            border-top: 2px solid #444;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.2rem 1.5rem;
+            color: #ff8c42;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            font-weight: 500;
+            border: none;
+            background: transparent;
+        }
+
+        .nav-link:hover {
+            background: #1a1a1a;
+            color: #ff8c42;
+        }
+
+        .nav-link.active {
+            background: #ff8c42;
+            color: #000000;
+            font-weight: 600;
+        }
+
+        .nav-link i {
+            font-size: 1.1rem;
+            width: 20px;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            background: #000;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .header {
+            background: #000;
+            color: #ff8c42;
+            padding: 1rem 2rem 2rem 2rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border-top: 2px solid #444;
+            border-right: 2px solid #444;
+            border-bottom: 2px solid #444;
+            position: relative;
+        }
+
+        .breadcrumb-section {
+            background: #e9ecef;
+            padding: 0.75rem 2rem;
+            border: 2px solid #444;
+            width: 92%;
+            position: relative;
+            margin: -20px auto 0 auto;
+            z-index: 20;
+        }
+
+        .breadcrumb-text {
+            color: #ff8c42;
+            font-size: 0.95rem;
+            margin: 0;
+            text-align: left;
+        }
+
+        .content-area {
+            padding: 2rem;
+            background: #000;
+            min-height: calc(100vh - 200px);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 4rem;
+        }
+
+        .main-container {
+            background: #e9ecef;
+            border-radius: 16px;
+            padding: 3rem 2.5rem;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            min-width: 500px;
+            max-width: 600px;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .btn-kartu-penilaian {
+            background: #ff8c42;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 1.2rem 2.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-kartu-penilaian:hover {
+            background: #e77529;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 140, 66, 0.3);
+        }
+
+        .btn-upload {
+            background: #565656;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 1.2rem 2.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-upload:hover {
+            background: #404040;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(86, 86, 86, 0.3);
+        }
+
+        .notice-section {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .notice-title {
+            color: #333;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+        }
+
+        .notice-text {
+            color: #555;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .content-area {
+                padding: 2rem 1rem;
+            }
+            
+            .main-container {
+                min-width: 280px;
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="user-profile">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="user-name">Avillian Aufa</div>
+        </div>
+        
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-chart-line"></i>
+                    Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-check-circle"></i>
+                    Approval Magang
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-user-graduate"></i>
+                    Bimbingan
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-file-alt"></i>
+                    Laporan Magang
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link active">
+                    <i class="fas fa-star"></i>
+                    Penilaian Magang
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-certificate"></i>
+                    Cetak Sertifikasi
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-users"></i>
+                    View Data Prodi
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            Magang Mahasiswa D3 TI
+        </div>
+        
+        <div class="breadcrumb-section">
+            <p class="breadcrumb-text">Penilaian Magang</p>
+        </div>
+        
+        <div class="content-area">
+            <div class="main-container">
+                <div class="button-container">
+                    <button class="btn-kartu-penilaian" onclick="handleKartuPenilaian()">
+                        Kartu Penilaian Magang
+                    </button>
+                    
+                    <button class="btn-upload" onclick="handleUpload()">
+                        Upload
+                    </button>
+                </div>
+                
+                <div class="notice-section">
+                    <div class="notice-title">PERHATIAN!</div>
+                    <div class="notice-text">
+                        Form penilaian diisi oleh pembimbing lapangan di perusahaan setelah mahasiswa menyelesaikan magang.
+                    </div>
+                    <div class="notice-text">
+                        Silakan download form, berikan kepada pembimbing perusahaan, dan upload kembali setelah diisi lengkap.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.style.transform = sidebar.style.transform === 'translateX(0%)' ? 'translateX(-100%)' : 'translateX(-100%)';
+        }
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                
+                this.classList.add('active');
+            });
+        });
+
+        function handleKartuPenilaian() {
+            alert('Mengunduh kartu penilaian magang...');
+        }
+
+        function handleUpload() {
+            alert('Membuka halaman upload penilaian...');
+        }
+    </script>
+</body>
+</html>
